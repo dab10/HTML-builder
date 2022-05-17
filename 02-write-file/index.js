@@ -8,15 +8,13 @@ stdout.write('Приветствую!\nВведите данные для зап
 
 
 stdin.on('data', data => {
-  const dataString = data.toString();
+  const dataString = data.toString().trim();
 
-  if (dataString === 'exit\r\n') {
+  if (dataString === 'exit') {
     stdout.write('Выход через "exit". Удачи!'); 
     process.exit();
   } else {
-    fs.appendFile(path.join(__dirname, 'text.txt'), data, (err) => {
-      if(err) throw err;
-    });
+    fs.appendFile(path.join(__dirname, 'text.txt'), data, () => {});
   }
 });
 
