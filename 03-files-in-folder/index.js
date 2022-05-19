@@ -15,7 +15,7 @@ fs.readdir(path.join(__dirname, 'secret-folder'),
           fs.stat(path.join(__dirname, 'secret-folder', file.name), 
             (err, stats) => {
               if (err) throw err;
-              let size = Math.round(stats.size * 0.000977 * 1000) / 1000;
+              let size = Math.round(stats.size / 1024 * 1000) / 1000;
               console.log(`${name} - ${extension} - ${size}kb`);
             });
         }
