@@ -12,7 +12,7 @@ async function main() {
   try {
     const files = await fsPromises.readdir(dirName, { withFileTypes: true });
     for (const file of files) {      
-      if (path.extname(file.name) === '.css') {
+      if (file.isFile() && path.extname(file.name) === '.css') {
         filesForMerged.push(file.name);
       }
     }
@@ -31,6 +31,7 @@ function merge() {
   currentFile = path.join(dirName, filesForMerged.shift());
   stream = fs.createReadStream(currentFile);
   stream.pipe(bundleCSS, {end: false});
+  bundleCSS.write('\n');
   stream.on('end', function() {
     merge();        
   });
