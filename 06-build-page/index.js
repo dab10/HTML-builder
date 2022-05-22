@@ -103,23 +103,20 @@ async function dataHTML() {
     for (const file of files) {
       await replacementHTML(file);
 
-      fs.readFile(path.join(__dirname, 'template.html'), 'utf8', function (err) {
-        if (err) throw err;
+      let nameTag = `{{${file.name.split('.').slice(0, 1).join('')}}}`;
+      let replaceThis = nameTag;
+      let re = new RegExp(replaceThis);
+      tempHTML = tempHTML.replace(re, replacement);
 
-        let nameTag = `{{${file.name.split('.').slice(0, 1).join('')}}}`;
-        let replaceThis = nameTag;
-        let re = new RegExp(replaceThis);
-        tempHTML = tempHTML.replace(re, replacement);
-
-        fs.writeFile(path.join(__dirname, 'project-dist', 'index.html'), tempHTML, 'utf8', function (err) {
-          if (err) return console.log(err);
-        });
-      });
+      const resHTML = fs.createWriteStream(path.join(__dirname, 'project-dist', 'index.html'));
+      resHTML.write(tempHTML);
     }
   } catch (err) {
     console.error(err);
   }
 }
+
+
 
 async function makeBundle() {
   await removeDir(path.join(__dirname, 'project-dist'))
